@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MovieRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
@@ -30,6 +32,17 @@ class Movie
 
     #[ORM\Column(length: 255)]
     private ?string $director = null;
+
+    /**
+     * @var Collection<int, Categorie>
+     */
+    #[ORM\OneToMany(targetEntity: Categorie::class, mappedBy: 'movies')]
+    private Collection $Categories;
+
+    public function __construct()
+    {
+        $this->Categories = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -111,6 +124,36 @@ class Movie
     public function setDirector(string $director): static
     {
         $this->director = $director;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Categorie>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->Categories;
+    }
+
+    public function addCategory(Categorie $category): static
+    {
+        if (!$this->Categories->contains($category)) {
+            $this->Categories->add($category);
+            $category->setMovies($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Categorie $category): static
+    {
+        if ($this->Categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getMovies() === $this) {
+                $category->setMovies(null);
+            }
+        }
 
         return $this;
     }
