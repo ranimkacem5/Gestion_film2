@@ -32,6 +32,9 @@ class Movie
 
     #[ORM\Column(length: 255)]
     private ?string $director = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
 
     /**
      * @var Collection<int, Categorie>
@@ -127,6 +130,18 @@ class Movie
 
         return $this;
     }
+    public function getImage(): ?string
+{
+    return $this->image;
+}
+
+public function setImage(?string $image): static
+{
+    $this->image = $image;
+
+    return $this;
+}
+
 
     /**
      * @return Collection<int, Categorie>

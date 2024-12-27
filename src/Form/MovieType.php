@@ -13,6 +13,7 @@ class MovieType extends AbstractType
     {
         $builder
             ->add('title')
+            ->add('image')
             ->add('descrition')
             ->add('releaseyear')
             ->add('duration')

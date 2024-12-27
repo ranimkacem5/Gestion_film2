@@ -4,20 +4,36 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        /* Typographie et couleurs */
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); /* Fond noir-bleu */
+            color: #fff;
+            margin: 0;
+            padding: 0;
         }
+        h1, h2, h3 {
+            font-weight: 600;
+            color: #2980b9; /* Bleu clair */
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Conteneur principal */
         .movies-container {
             padding: 2rem;
-            background-color: rgba(255, 255, 255, 0.9);
+            background: rgba(0, 0, 0, 0.8); /* Fond sombre */
             border-radius: 15px;
             margin: 2rem auto;
-            max-width: 1400px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            max-width: 1200px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
+
+        /* En-tête */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -25,86 +41,124 @@
             margin-bottom: 2rem;
         }
         .btn-add-movie {
-            background-color: #4CAF50;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            text-decoration: none;
+            background: #2980b9; /* Bleu clair */
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: bold;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
         }
         .btn-add-movie:hover {
-            background-color: #45a049;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background: #1c598a; /* Bleu foncé */
+            box-shadow: 0 6px 15px rgba(41, 128, 185, 0.5);
         }
+
+        /* Tableau des films */
         .movie-table {
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: #2c3e50; /* Fond sombre */
             border-radius: 10px;
             overflow: hidden;
-            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         .movie-table thead {
-            background: linear-gradient(90deg, #2c3e50, #3498db);
-            color: white;
+            background: linear-gradient(90deg, #2980b9, #1c598a); /* Bleu clair et foncé */
+            color: #fff;
         }
-        .movie-table th {
+        .movie-table th, .movie-table td {
             padding: 1rem;
-            font-weight: 500;
-        }
-        .movie-table td {
-            padding: 0.75rem 1rem;
+            text-align: center;
             vertical-align: middle;
-        }
-        .movie-table tbody tr {
-            transition: all 0.3s ease;
+            font-size: 0.95rem;
         }
         .movie-table tbody tr:hover {
-            background-color: #f8f9fa;
-            transform: scale(1.005);
+            background: #34495e; /* Légèrement plus clair au survol */
         }
+
+        /* Champs de formulaire */
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: 2px solid #2980b9;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            background-color: #34495e; /* Fond sombre */
+            color: #fff;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #1c598a;
+            box-shadow: 0 0 10px rgba(28, 89, 138, 0.5);
+            outline: none;
+        }
+
+        /* Boutons d'actions */
         .action-buttons {
             display: flex;
             gap: 0.5rem;
+            justify-content: center;
+        }
+        .btn-show, .btn-edit {
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #fff;
+            transition: all 0.3s ease;
         }
         .btn-show {
-            background-color: #3498db;
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            background: #2980b9;
+            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
         }
         .btn-edit {
-            background-color: #f39c12;
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            background: #16a085;
+            box-shadow: 0 4px 10px rgba(22, 160, 133, 0.3);
         }
-        .btn-show:hover, .btn-edit:hover {
-            opacity: 0.9;
-            color: white;
-            transform: translateY(-2px);
+        .btn-show:hover {
+            background: #1c598a;
         }
+        .btn-edit:hover {
+            background: #1f7e6d;
+        }
+
+        /* Message vide */
         .empty-message {
             text-align: center;
-            padding: 2rem;
-            color: #7f8c8d;
+            color: #ccc;
+            font-size: 1rem;
             font-style: italic;
+            padding: 2rem;
         }
-        .description-cell {
-            max-width: 300px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+
+        /* Affichage des étoiles */
+        .stars {
+            color: gold;
+            font-size: 1.2rem;
         }
-        .display-4 {
-            color: #2c3e50;
-            font-weight: 600;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+
+        .stars-empty {
+            color: #ccc;
+            font-size: 1.2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            .btn-add-movie {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+            .movie-table {
+                font-size: 0.85rem;
+            }
         }
     </style>
 {% endblock %}
@@ -118,46 +172,47 @@
             </a>
         </div>
 
-        <div class="movie-table">
-            <table class="table table-borderless mb-0">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Titre</th>
-                        <th>Description</th>
-                        <th>Année</th>
-                        <th>Durée</th>
-                        <th>Note</th>
-                        <th>Réalisateur</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <table class="movie-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Titre</th>
+                    <th>Description</th>
+                    <th>Année</th>
+                    <th>Durée</th>
+                    <th>Note</th>
+                    <th>Réalisateur</th>
+                    <th>Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
                 {% for movie in movies %}
                     <tr>
                         <td>{{ movie.id }}</td>
-                        <td><strong>{{ movie.title }}</strong></td>
-                        <td class="description-cell" title="{{ movie.descrition }}">
-                            {{ movie.descrition }}
-                        </td>
+                        <td>{{ movie.title }}</td>
+                        <td>{{ movie.descrition|length > 50 ? movie.descrition|slice(0, 50) ~ '...' : movie.descrition }}</td>
                         <td>{{ movie.releaseyear }}</td>
                         <td>{{ movie.duration }} heure</td>
                         <td>
-                            {% if movie.rating %}
-                                <span class="text-warning">
-                                    {% for i in 1..5 %}
-                                        {% if i <= movie.rating %}
-                                            ★
-                                        {% else %}
-                                            ☆
-                                        {% endif %}
-                                    {% endfor %}
-                                </span>
-                            {% else %}
-                                Non noté
-                            {% endif %}
+                            <div class="stars">
+                                {% for i in 1..5 %}
+                                    {% if i <= movie.rating %}
+                                        <i class="fas fa-star"></i>  <!-- Étoile pleine -->
+                                    {% else %}
+                                        <i class="fas fa-star-half-alt"></i>  <!-- Étoile vide -->
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         </td>
                         <td>{{ movie.director }}</td>
+                        <td>
+                            {% if movie.image %}
+                                <img src="{{ asset(movie.image) }}" alt="{{ movie.title }}" class="movie-poster-thumb">
+                            {% else %}
+                                <img src="{{ asset('images/default-movie.jpg') }}" alt="Default image" class="movie-poster-thumb">
+                            {% endif %}
+                        </td>
                         <td>
                             <div class="action-buttons">
                                 <a href="{{ path('app_movie_show', {'id': movie.id}) }}" class="btn-show">
@@ -171,13 +226,13 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="8" class="empty-message">
-                            Aucun film n'a été trouvé dans la base de données
+                        <td colspan="9" class="empty-message">
+                            Aucun film trouvé dans la base de données.
                         </td>
                     </tr>
                 {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
     </div>
 {% endblock %}
+
