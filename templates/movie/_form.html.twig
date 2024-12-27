@@ -1,4 +1,42 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+{{ form_start(form, {'attr': {'class': 'movie-form'}}) }}
+    <div class="form-group">
+        {{ form_label(form.title, 'Titre du film', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.title, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le titre du film'}}) }}
+        {{ form_errors(form.title) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.descrition, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.descrition, {'attr': {'class': 'form-control', 'placeholder': 'Entrez la description du film', 'rows': '4'}}) }}
+        {{ form_errors(form.descrition) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.releaseyear, 'Année de sortie', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.releaseyear, {'attr': {'class': 'form-control', 'placeholder': 'Entrez l\'année de sortie'}}) }}
+        {{ form_errors(form.releaseyear) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.duration, 'Durée (heures)', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.duration, {'attr': {'class': 'form-control', 'placeholder': 'Entrez la durée en heures '}}) }}
+        {{ form_errors(form.duration) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.rating, 'Note', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.rating, {'attr': {'class': 'form-control', 'placeholder': 'Donnez une note de 1 à 5'}}) }}
+        {{ form_errors(form.rating) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(form.director, 'Réalisateur', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.director, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom du réalisateur'}}) }}
+        {{ form_errors(form.director) }}
+    </div>
+
+    <button class="btn-submit">
+        <i class="fas fa-save"></i> {{ button_label|default('Enregistrer') }}
+    </button>
 {{ form_end(form) }}
