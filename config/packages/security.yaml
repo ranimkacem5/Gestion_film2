@@ -1,39 +1,43 @@
+# config/packages/security.yaml
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    # Configuration des encodeurs de mot de passe
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+        App\Entity\User: 'auto'  # Utilisation du mot de passe hashé selon le format recommandé par Symfony (bcrypt ou argon2i)
+
+    # Définition des providers d'utilisateur (ici en base de données avec Doctrine)
     providers:
-        users_in_memory: { memory: null }
+        users_in_database:
+            entity:
+                class: App\Entity\User
+                property: email  # Utiliser l'email pour se connecter, changez-le si vous utilisez un autre champ
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        # Configurer le firewall principal
         main:
-            lazy: true
-            provider: users_in_memory
+            # Configuration de l'authentification
+            provider: users_in_database  # Utilisation du provider créé ci-dessus
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
+            # Configuration du formulaire de connexion
+            form_login:
+                login_path: login  # Route vers la page de connexion
+                check_path: login  # Route qui traite la soumission du formulaire
+                username_parameter: email  # Paramètre du formulaire pour l'email
+                password_parameter: password  # Paramètre du formulaire pour le mot de passe
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            # Déconnexion
+            logout:
+                path: app_logout  # Route de déconnexion
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
+            # Authentification automatique après un certain délai
+            remember_me:
+                secret: '%env(APP_SECRET)%'  # Clé secrète, définie dans votre fichier .env
+
+    # Définition des rôles et des restrictions d'accès
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/profile, roles: ROLE_USER }
 
-when@test:
-    security:
-        password_hashers:
-            # By default, password hashers are resource intensive and take time. This is
-            # important to generate secure password hashes. In tests however, secure hashes
-            # are not important, waste resources and increase test times. The following
-            # reduces the work factor to the lowest possible values.
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
-                time_cost: 3 # Lowest possible value for argon
-                memory_cost: 10 # Lowest possible value for argon

@@ -1,41 +1,153 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Acteur index{% endblock %}
+{% block title %}Catalogue des Acteurs{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .actors-container {
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 1400px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        .btn-add-actor {
+            background-color: #4CAF50;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .btn-add-actor:hover {
+            background-color: #45a049;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .actor-table {
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: white;
+        }
+        .actor-table thead {
+            background: linear-gradient(90deg, #2c3e50, #3498db);
+            color: white;
+        }
+        .actor-table th {
+            padding: 1rem;
+            font-weight: 500;
+        }
+        .actor-table td {
+            padding: 0.75rem 1rem;
+            vertical-align: middle;
+        }
+        .actor-table tbody tr {
+            transition: all 0.3s ease;
+        }
+        .actor-table tbody tr:hover {
+            background-color: #f8f9fa;
+            transform: scale(1.005);
+        }
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .btn-show, .btn-edit {
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-show {
+            background-color: #3498db;
+        }
+        .btn-edit {
+            background-color: #f39c12;
+        }
+        .btn-show:hover, .btn-edit:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .empty-message {
+            text-align: center;
+            padding: 2rem;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        .display-4 {
+            color: #2c3e50;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Acteur index</h1>
+    <div class="actors-container">
+        <div class="page-header">
+            <h1 class="display-4">Catalogue des Acteurs</h1>
+            <a href="{{ path('app_acteur_new') }}" class="btn-add-actor">
+                <i class="fas fa-plus-circle"></i> Ajouter un acteur
+            </a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Nationalite</th>
-                <th>DateNaissance</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for acteur in acteurs %}
-            <tr>
-                <td>{{ acteur.id }}</td>
-                <td>{{ acteur.nom }}</td>
-                <td>{{ acteur.prenom }}</td>
-                <td>{{ acteur.nationalite }}</td>
-                <td>{{ acteur.dateNaissance ? acteur.dateNaissance|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_acteur_show', {'id': acteur.id}) }}">show</a>
-                    <a href="{{ path('app_acteur_edit', {'id': acteur.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_acteur_new') }}">Create new</a>
+        <div class="actor-table">
+            <table class="table table-borderless mb-0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Nationalité</th>
+                        <th>Date de naissance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for acteur in acteurs %}
+                    <tr>
+                        <td>{{ acteur.id }}</td>
+                        <td><strong>{{ acteur.nom }}</strong></td>
+                        <td>{{ acteur.prenom }}</td>
+                        <td>{{ acteur.nationalite }}</td>
+                        <td>{{ acteur.dateNaissance ? acteur.dateNaissance|date('Y-m-d') : 'Non précisée' }}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{{ path('app_acteur_show', {'id': acteur.id}) }}" class="btn-show">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ path('app_acteur_edit', {'id': acteur.id}) }}" class="btn-edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="empty-message">
+                            Aucun acteur n'a été trouvé dans la base de données
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

@@ -1,38 +1,100 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Acteur{% endblock %}
+{% block title %}Détails de l'Acteur{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .actor-details-container {
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 800px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        }
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .actor-details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .actor-details-table th {
+            text-align: left;
+            background-color: #3498db;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 5px 5px 0 0;
+        }
+        .actor-details-table td {
+            padding: 0.8rem;
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+        }
+        .actor-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        .btn-back, .btn-edit, .btn-delete {
+            background-color: #3498db;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        .btn-edit {
+            background-color: #f39c12;
+        }
+        .btn-delete {
+            background-color: #e74c3c;
+        }
+        .btn-back:hover, .btn-edit:hover, .btn-delete:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Acteur</h1>
+    <div class="actor-details-container">
+        <div class="page-header">
+            <h1 class="display-4">Détails de l'Acteur</h1>
+        </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ acteur.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ acteur.nom }}</td>
-            </tr>
-            <tr>
-                <th>Prenom</th>
-                <td>{{ acteur.prenom }}</td>
-            </tr>
-            <tr>
-                <th>Nationalite</th>
-                <td>{{ acteur.nationalite }}</td>
-            </tr>
-            <tr>
-                <th>DateNaissance</th>
-                <td>{{ acteur.dateNaissance ? acteur.dateNaissance|date('Y-m-d') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <table class="actor-details-table">
+            <tbody>
+                <tr>
+                    <th>ID</th>
+                    <td>{{ acteur.id }}</td>
+                </tr>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ acteur.nom }}</td>
+                </tr>
+                <tr>
+                    <th>Prénom</th>
+                    <td>{{ acteur.prenom }}</td>
+                </tr>
+                <tr>
+                    <th>Nationalité</th>
+                    <td>{{ acteur.nationalite }}</td>
+                </tr>
+                <tr>
+                    <th>Date de Naissance</th>
+                    <td>{{ acteur.dateNaissance ? acteur.dateNaissance|date('Y-m-d') : '' }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-    <a href="{{ path('app_acteur_index') }}">back to list</a>
-
-    <a href="{{ path('app_acteur_edit', {'id': acteur.id}) }}">edit</a>
-
-    {{ include('acteur/_delete_form.html.twig') }}
+        <div class="actor-actions">
+            <a href="{{ path('app_acteur_index') }}" class="btn-back">← Retour à la liste</a>
+            <a href="{{ path('app_acteur_edit', {'id': acteur.id}) }}" class="btn-edit">Modifier</a>
+            {{ include('acteur/_delete_form.html.twig', { 'class': 'btn-delete' }) }}
+        </div>
+    </div>
 {% endblock %}

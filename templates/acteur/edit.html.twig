@@ -1,13 +1,112 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Acteur{% endblock %}
+{% block title %}Édition de l'acteur{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .edit-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            backdrop-filter: blur(10px);
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        .page-title {
+            color: #2c3e50;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .actions-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #45a049;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            color: white;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+            color: white;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Acteur</h1>
+    <div class="edit-container">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-edit"></i>
+                Édition de l'acteur
+            </h1>
+        </div>
 
-    {{ include('acteur/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('acteur/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('app_acteur_index') }}">back to list</a>
-
-    {{ include('acteur/_delete_form.html.twig') }}
+        <div class="actions-container">
+            <div class="left-buttons">
+                <a href="{{ path('app_acteur_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Retour à la liste
+                </a>
+            </div>
+            
+            <div class="right-buttons">
+                {{ include('acteur/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
