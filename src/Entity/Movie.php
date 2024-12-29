@@ -35,6 +35,20 @@ class Movie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
+    /**
+     * @var Collection<int, Categorie>
+     */
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'movies')]
+    private Collection $Categories;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Url = null;
+
+    public function __construct()
+    {
+        $this->Categories = new ArrayCollection();
+    }
+
 
     
 
@@ -129,6 +143,42 @@ class Movie
 public function setImage(?string $image): static
 {
     $this->image = $image;
+
+    return $this;
+}
+
+/**
+ * @return Collection<int, Categorie>
+ */
+public function getCategories(): Collection
+{
+    return $this->Categories;
+}
+
+public function addCategory(Categorie $category): static
+{
+    if (!$this->Categories->contains($category)) {
+        $this->Categories->add($category);
+    }
+
+    return $this;
+}
+
+public function removeCategory(Categorie $category): static
+{
+    $this->Categories->removeElement($category);
+
+    return $this;
+}
+
+public function getUrl(): ?string
+{
+    return $this->Url;
+}
+
+public function setUrl(string $Url): static
+{
+    $this->Url = $Url;
 
     return $this;
 }
