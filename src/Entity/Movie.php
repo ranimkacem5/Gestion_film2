@@ -36,16 +36,7 @@ class Movie
     private ?string $image = null;
 
 
-    /**
-     * @var Collection<int, Categorie>
-     */
-    #[ORM\OneToMany(targetEntity: Categorie::class, mappedBy: 'movies')]
-    private Collection $Categories;
-
-    public function __construct()
-    {
-        $this->Categories = new ArrayCollection();
-    }
+    
 
     public function getId(): ?int
     {
@@ -143,33 +134,5 @@ public function setImage(?string $image): static
 }
 
 
-    /**
-     * @return Collection<int, Categorie>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->Categories;
-    }
-
-    public function addCategory(Categorie $category): static
-    {
-        if (!$this->Categories->contains($category)) {
-            $this->Categories->add($category);
-            $category->setMovies($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Categorie $category): static
-    {
-        if ($this->Categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getMovies() === $this) {
-                $category->setMovies(null);
-            }
-        }
-
-        return $this;
-    }
+   
 }
