@@ -35,17 +35,22 @@ class Movie
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $image = null;
 
-
     /**
      * @var Collection<int, Categorie>
      */
-    #[ORM\OneToMany(targetEntity: Categorie::class, mappedBy: 'movies')]
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'movies')]
     private Collection $Categories;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Url = null;
 
     public function __construct()
     {
         $this->Categories = new ArrayCollection();
     }
+
+
+    
 
     public function getId(): ?int
     {
@@ -142,34 +147,42 @@ public function setImage(?string $image): static
     return $this;
 }
 
+/**
+ * @return Collection<int, Categorie>
+ */
+public function getCategories(): Collection
+{
+    return $this->Categories;
+}
 
-    /**
-     * @return Collection<int, Categorie>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->Categories;
+public function addCategory(Categorie $category): static
+{
+    if (!$this->Categories->contains($category)) {
+        $this->Categories->add($category);
     }
 
-    public function addCategory(Categorie $category): static
-    {
-        if (!$this->Categories->contains($category)) {
-            $this->Categories->add($category);
-            $category->setMovies($this);
-        }
+    return $this;
+}
 
-        return $this;
-    }
+public function removeCategory(Categorie $category): static
+{
+    $this->Categories->removeElement($category);
 
-    public function removeCategory(Categorie $category): static
-    {
-        if ($this->Categories->removeElement($category)) {
-            // set the owning side to null (unless already changed)
-            if ($category->getMovies() === $this) {
-                $category->setMovies(null);
-            }
-        }
+    return $this;
+}
 
-        return $this;
-    }
+public function getUrl(): ?string
+{
+    return $this->Url;
+}
+
+public function setUrl(string $Url): static
+{
+    $this->Url = $Url;
+
+    return $this;
+}
+
+
+   
 }
