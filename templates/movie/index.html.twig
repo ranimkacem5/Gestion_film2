@@ -213,6 +213,7 @@
                                 <img src="{{ asset('images/default-movie.jpg') }}" alt="Default image" class="movie-poster-thumb">
                             {% endif %}
                         </td>
+                        <td>{{ movie.Url }} heure</td>
                         <td>
                             <div class="action-buttons">
                                 <a href="{{ path('app_movie_show', {'id': movie.id}) }}" class="btn-show">

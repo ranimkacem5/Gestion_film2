@@ -31,10 +31,12 @@
     </div>
 
     <div class="form-group">
-        {{ form_label(form.director, 'Réalisateur', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.director, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom du réalisateur'}}) }}
-        {{ form_errors(form.director) }}
+        {{ form_label(form.Url, 'Url', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.Url, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom url'}}) }}
+        {{ form_errors(form.Url) }}
     </div>
+
+
 
     <button class="btn-submit">
         <i class="fas fa-save"></i> {{ button_label|default('Enregistrer') }}

@@ -19,6 +19,7 @@ class MovieType extends AbstractType
             ->add('duration')
             ->add('rating')
             ->add('director')
+            ->add('Url')
         ;
     }
 
