@@ -1,163 +1,175 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Catalogue des Films{% endblock %}
+{% use "@VichUploader/Form/fields.html.twig" %}
 
 {% block stylesheets %}
     {{ parent() }}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Typographie et couleurs */
         body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); /* Fond noir-bleu */
-            color: #fff;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
             margin: 0;
-            padding: 0;
-        }
-        h1, h2, h3 {
-            font-weight: 600;
-            color: #2980b9; /* Bleu clair */
-        }
-        a {
-            color: inherit;
-            text-decoration: none;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
         }
 
-        /* Conteneur principal */
         .movies-container {
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.8); /* Fond sombre */
-            border-radius: 15px;
+            max-width: 1400px;
             margin: 2rem auto;
-            max-width: 1200px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            padding: 2rem;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            backdrop-filter: blur(10px);
         }
 
-        /* En-tête */
         .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
-        }
-        .btn-add-movie {
-            background: #2980b9; /* Bleu clair */
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
-        }
-        .btn-add-movie:hover {
-            background: #1c598a; /* Bleu foncé */
-            box-shadow: 0 6px 15px rgba(41, 128, 185, 0.5);
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
         }
 
-        /* Tableau des films */
+        .page-header h1 {
+            color: #2b4d7e;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .btn-add-movie {
+            background-color: #3498db;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-add-movie:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
         .movie-table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-            background: #2c3e50; /* Fond sombre */
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            min-width: 1000px;
         }
-        .movie-table thead {
-            background: linear-gradient(90deg, #2980b9, #1c598a); /* Bleu clair et foncé */
-            color: #fff;
-        }
-        .movie-table th, .movie-table td {
+
+        .movie-table th {
+            background: #2b4d7e;
+            color: white;
             padding: 1rem;
-            text-align: center;
-            vertical-align: middle;
-            font-size: 0.95rem;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
+
+        .movie-table th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        .movie-table th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+        .movie-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e9ecef;
+            color: #2c3e50;
+        }
+
         .movie-table tbody tr:hover {
-            background: #34495e; /* Légèrement plus clair au survol */
+            background: #f8f9fa;
+            transform: scale(1.005);
+            transition: all 0.2s ease;
         }
 
-        /* Champs de formulaire */
-        input, select, textarea {
-            width: 100%;
-            padding: 0.75rem;
-            margin: 0.5rem 0;
-            border: 2px solid #2980b9;
+        .movie-thumbnail {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
             border-radius: 5px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            background-color: #34495e; /* Fond sombre */
-            color: #fff;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: #1c598a;
-            box-shadow: 0 0 10px rgba(28, 89, 138, 0.5);
-            outline: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        /* Boutons d'actions */
-        .action-buttons {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
+        .stars {
+            display: inline-flex;
+            gap: 0.2rem;
+            color: #3498db;
         }
-        .btn-show, .btn-edit {
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: #fff;
+
+        .btn-action {
+            padding: 0.5rem;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            margin: 0 0.25rem;
             transition: all 0.3s ease;
         }
+
         .btn-show {
-            background: #2980b9;
-            box-shadow: 0 4px 10px rgba(41, 128, 185, 0.3);
-        }
-        .btn-edit {
-            background: #16a085;
-            box-shadow: 0 4px 10px rgba(22, 160, 133, 0.3);
-        }
-        .btn-show:hover {
-            background: #1c598a;
-        }
-        .btn-edit:hover {
-            background: #1f7e6d;
+            background: #3498db;
         }
 
-        /* Message vide */
+        .btn-edit {
+            background: #2980b9;
+        }
+
+        .btn-show:hover, .btn-edit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
         .empty-message {
             text-align: center;
-            color: #ccc;
-            font-size: 1rem;
+            color: #6c757d;
+            padding: 3rem;
             font-style: italic;
-            padding: 2rem;
         }
 
-        /* Affichage des étoiles */
-        .stars {
-            color: gold;
-            font-size: 1.2rem;
-        }
-
-        .stars-empty {
-            color: #ccc;
-            font-size: 1.2rem;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
+            .movies-container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+
             .page-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 1rem;
             }
+
             .btn-add-movie {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-            }
-            .movie-table {
-                font-size: 0.85rem;
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -166,74 +178,86 @@
 {% block body %}
     <div class="movies-container">
         <div class="page-header">
-            <h1 class="display-4">Catalogue des Films</h1>
+            <h1><i class="fas fa-film"></i> Catalogue des Films</h1>
             <a href="{{ path('app_movie_new') }}" class="btn-add-movie">
-                <i class="fas fa-plus-circle"></i> Ajouter un film
+                <i class="fas fa-plus-circle"></i>
+                Ajouter un film
             </a>
         </div>
 
-        <table class="movie-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Titre</th>
-                    <th>Description</th>
-                    <th>Année</th>
-                    <th>Durée</th>
-                    <th>Note</th>
-                    <th>Réalisateur</th>
-                    <th>Image</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for movie in movies %}
+        <div class="table-responsive">
+            <table class="movie-table">
+                <thead>
                     <tr>
-                        <td>{{ movie.id }}</td>
-                        <td>{{ movie.title }}</td>
-                        <td>{{ movie.descrition|length > 50 ? movie.descrition|slice(0, 50) ~ '...' : movie.descrition }}</td>
-                        <td>{{ movie.releaseyear }}</td>
-                        <td>{{ movie.duration }} heure</td>
-                        <td>
-                            <div class="stars">
-                                {% for i in 1..5 %}
-                                    {% if i <= movie.rating %}
-                                        <i class="fas fa-star"></i>  <!-- Étoile pleine -->
-                                    {% else %}
-                                        <i class="fas fa-star-half-alt"></i>  <!-- Étoile vide -->
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </td>
-                        <td>{{ movie.director }}</td>
-                        <td>
-                            {% if movie.image %}
-                                <img src="{{ asset(movie.image) }}" alt="{{ movie.title }}" class="movie-poster-thumb">
-                            {% else %}
-                                <img src="{{ asset('images/default-movie.jpg') }}" alt="Default image" class="movie-poster-thumb">
-                            {% endif %}
-                        </td>
-                        <td>{{ movie.Url }} heure</td>
-                        <td>
-                            <div class="action-buttons">
-                                <a href="{{ path('app_movie_show', {'id': movie.id}) }}" class="btn-show">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ path('app_movie_edit', {'id': movie.id}) }}" class="btn-edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </div>
-                        </td>
+                        <th>ID</th>
+                        <th>Image</th>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Année</th>
+                        <th>Durée</th>
+                        <th>Note</th>
+                        <th>Réalisateur</th>
+                        <th>Actions</th>
                     </tr>
-                {% else %}
-                    <tr>
-                        <td colspan="9" class="empty-message">
-                            Aucun film trouvé dans la base de données.
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {% for movie in movies %}
+                        <tr>
+                            <td>{{ movie.id }}</td>
+                            <td>
+                                {% if movie.imageName %}
+                                    <img src="{{ vich_uploader_asset(movie, 'imageFile') }}"
+                                         alt="{{ movie.title }}"
+                                         class="movie-thumbnail">
+                                {% else %}
+                                    <img src="{{ asset('images/placeholder-movie.jpg') }}"
+                                         alt="Pas d'image"
+                                         class="movie-thumbnail">
+                                {% endif %}
+                            </td>
+                            <td>{{ movie.title }}</td>
+                            <td class="truncate">{{ movie.description }}</td>
+                            <td>{{ movie.releaseyear }}</td>
+                            <td>{{ movie.duration }}h</td>
+                            <td>
+                                <div class="stars">
+                                    {% for i in 1..5 %}
+                                        {% if i <= movie.rating %}
+                                            <i class="fas fa-star"></i>
+                                        {% elseif (i - 0.5) <= movie.rating %}
+                                            <i class="fas fa-star-half-alt"></i>
+                                        {% else %}
+                                            <i class="far fa-star"></i>
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </td>
+                            <td>{{ movie.director }}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a href="{{ path('app_movie_show', {'id': movie.id}) }}" 
+                                       class="btn-action btn-show" 
+                                       title="Voir les détails">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_movie_edit', {'id': movie.id}) }}" 
+                                       class="btn-action btn-edit"
+                                       title="Modifier">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="9" class="empty-message">
+                                <i class="fas fa-film"></i>
+                                Aucun film trouvé dans la base de données.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 {% endblock %}
-
