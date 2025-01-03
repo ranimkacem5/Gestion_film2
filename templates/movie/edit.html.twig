@@ -6,117 +6,199 @@
     {{ parent() }}
     <style>
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #eef2f7 0%, #d1d8e5 100%);
             min-height: 100vh;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            color: #34495e;
         }
+
         .edit-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 2rem auto;
             padding: 2rem;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
-            backdrop-filter: blur(10px);
+            background-color: #ffffff;
+            border-radius: 1.25rem;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease-in-out;
         }
+
+        .edit-container:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
         .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #e9ecef;
+            text-align: center;
+            padding: 1.5rem 0;
         }
+
         .page-title {
             color: #2c3e50;
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin: 0;
+            font-size: 2.2rem;
+            font-weight: 700;
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
-        .actions-container {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            gap: 1rem;
-            flex-wrap: wrap;
+
+        .page-title i {
+            color: #1abc9c;
         }
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-        }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        .btn-primary {
-            background-color: #4CAF50;
-            color: white;
-        }
-        .btn-primary:hover {
-            background-color: #45a049;
-            color: white;
-        }
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-        .btn-secondary:hover {
-            background-color: #5a6268;
-            color: white;
-        }
-        .btn-danger {
-            background-color: #dc3545;
-            color: white;
-        }
-        .btn-danger:hover {
-            background-color: #c82333;
-            color: white;
-        }
+
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
+
         .form-label {
-            font-weight: 500;
-            color: #2c3e50;
+            font-weight: 600;
+            color: #34495e;
             margin-bottom: 0.5rem;
             display: block;
         }
+
         .form-control {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            transition: border-color 0.3s ease;
+            padding: 1rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
         }
+
         .form-control:focus {
-            outline: none;
-            border-color: #4CAF50;
-            box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+            border-color: #1abc9c;
+            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2);
         }
+
+        .actions-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background-color: #1abc9c;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            color: white;
+        }
+
         .alert {
             padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background-color: #f4f4f9;
         }
-        .alert-danger {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            color: #721c24;
-        }
+
         .alert-success {
             background-color: #d4edda;
-            border: 1px solid #c3e6cb;
             color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        /* Nouveaux styles pour l'image */
+        .movie-image-container {
+            margin: 1rem 0;
+            text-align: center;
+        }
+.edit-container .movie-image-container img.movie-image {
+    max-width: 100px !important;
+    max-height: 100px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+}
+
+.edit-container .movie-image-container {
+    max-width: 100px !important;
+    margin: 1rem auto !important;
+    text-align: center !important;
+}
+
+        .btn-submit {
+            background-color: #1abc9c;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(26, 188, 156, 0.3);
+        }
+
+        @media (max-width: 640px) {
+            .edit-container {
+                padding: 1.5rem;
+            }
+
+            .actions-container {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .movie-image {
+                max-width: 100%;
+            }
         }
     </style>
 {% endblock %}
@@ -125,40 +207,33 @@
     <div class="edit-container">
         <div class="page-header">
             <h1 class="page-title">
-                <i class="fas fa-edit"></i>
-                Édition du film
+                <i class="fas fa-edit"></i> Édition du film
             </h1>
         </div>
 
-        <!-- Flash messages for success or errors -->
         {% if app.session.flashBag.has('success') %}
             <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i>
                 {% for message in app.session.flashBag.get('success') %}
                     <p>{{ message }}</p>
                 {% endfor %}
             </div>
         {% elseif app.session.flashBag.has('error') %}
             <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i>
                 {% for message in app.session.flashBag.get('error') %}
                     <p>{{ message }}</p>
                 {% endfor %}
             </div>
         {% endif %}
 
-        <!-- Include the form with a custom button label -->
         {{ include('movie/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-        <div class="actions-container">
-            <div class="left-buttons">
-                <a href="{{ path('app_movie_index') }}" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left"></i>
-                    Retour à la liste
-                </a>
-            </div>
-            
-            <div class="right-buttons">
-                {{ include('movie/_delete_form.html.twig') }}
-            </div>
+        <div class="footer-buttons">
+            <a href="{{ path('app_movie_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+            {{ include('movie/_delete_form.html.twig') }}
         </div>
     </div>
 {% endblock %}

@@ -4,11 +4,15 @@
 
 {% block stylesheets %}
     {{ parent() }}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
+            margin: 0;
+            padding: 20px;
         }
+        
         .new-movie-container {
             max-width: 800px;
             margin: 2rem auto;
@@ -18,6 +22,7 @@
             box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
             backdrop-filter: blur(10px);
         }
+        
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -26,6 +31,7 @@
             padding-bottom: 1rem;
             border-bottom: 2px solid #e9ecef;
         }
+        
         .page-title {
             color: #2c3e50;
             font-size: 2.5rem;
@@ -33,30 +39,66 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
             margin: 0;
         }
+        
+        .page-title i {
+            margin-right: 0.5rem;
+            color: #4CAF50;
+        }
+        
+        /* Style du formulaire */
         .form-group {
             margin-bottom: 1.5rem;
         }
+        
         .form-label {
             font-weight: 500;
             color: #2c3e50;
             margin-bottom: 0.5rem;
             display: block;
         }
+        
         .form-control {
+            width: 100%;
             border-radius: 8px;
             border: 1px solid #ced4da;
             padding: 0.75rem;
+            font-size: 1rem;
             transition: all 0.3s ease;
         }
+        
         .form-control:focus {
             border-color: #4CAF50;
             box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+            outline: none;
         }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        /* Styles pour le champ d'upload d'image */
+        .vich-image {
+            margin-bottom: 1.5rem;
+        }
+        
+        .vich-image img {
+            max-width: 200px;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+        
+        .vich-image .form-check {
+            margin-top: 0.5rem;
+        }
+        
+        /* Groupe de boutons */
         .button-group {
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
         }
+        
         .btn-submit {
             background-color: #4CAF50;
             color: white;
@@ -68,6 +110,7 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
+        
         .btn-back {
             background-color: #6c757d;
             color: white;
@@ -77,12 +120,45 @@
             font-weight: 500;
             text-decoration: none;
             transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+        
         .btn-submit:hover, .btn-back:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             color: white;
             opacity: 0.9;
+        }
+
+        /* Messages d'erreur */
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .new-movie-container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+            
+            .page-title {
+                font-size: 1.8rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn-submit, .btn-back {
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
         }
     </style>
 {% endblock %}
@@ -95,12 +171,63 @@
             </h1>
         </div>
 
-        {{ include('movie/_form.html.twig') }}
+        {{ form_start(form, {'attr': {'class': 'movie-form'}}) }}
+            <div class="form-group">
+                {{ form_label(form.title, 'Titre du film', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.title) }}
+            </div>
 
-        <div class="button-group">
-            <a href="{{ path('app_movie_index') }}" class="btn-back">
-                <i class="fas fa-arrow-left"></i> Retour à la liste
-            </a>
-        </div>
+            <div class="form-group">
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.imageFile, 'Image du film', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.imageFile, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.imageFile) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.releaseyear, 'Année de sortie', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.releaseyear, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.releaseyear) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.duration, 'Durée (en heures)', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.duration, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.duration) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.rating, 'Note', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.rating, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.rating) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.director, 'Réalisateur', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.director, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.director) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.Url, 'URL de la bande-annonce', {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.Url, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.Url) }}
+            </div>
+
+            <div class="button-group">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save"></i> Enregistrer
+                </button>
+                <a href="{{ path('app_movie_index') }}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                </a>
+            </div>
+        {{ form_end(form) }}
     </div>
 {% endblock %}

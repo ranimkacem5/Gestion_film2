@@ -1,4 +1,3 @@
-
 {{ form_start(form, {'attr': {'class': 'movie-form'}}) }}
     <div class="form-group">
         {{ form_label(form.title, 'Titre du film', {'label_attr': {'class': 'form-label'}}) }}
@@ -7,9 +6,9 @@
     </div>
 
     <div class="form-group">
-        {{ form_label(form.descrition, 'Description', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.descrition, {'attr': {'class': 'form-control', 'placeholder': 'Entrez la description du film', 'rows': '4'}}) }}
-        {{ form_errors(form.descrition) }}
+        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Entrez la description du film', 'rows': '4'}}) }}
+        {{ form_errors(form.description) }}
     </div>
 
     <div class="form-group">
@@ -31,12 +30,22 @@
     </div>
 
     <div class="form-group">
-        {{ form_label(form.Url, 'Url', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.Url, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom url'}}) }}
-        {{ form_errors(form.Url) }}
+        {{ form_label(form.director, 'Réalisateur', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.director, {'attr': {'class': 'form-control', 'placeholder': 'Entrez le nom du réalisateur'}}) }}
+        {{ form_errors(form.director) }}
     </div>
 
-
+    <div class="form-group">
+    {% if form.parent.vars.value.Url is defined and form.parent.vars.value.Url is not empty %}
+        <div class="movie-image-container">
+            <img src="{{ form.parent.vars.value.Url }}" alt="Image du film" class="movie-image" style="max-width: 100px; max-height: 100px;">
+        </div>
+    {% endif %}
+    
+    {{ form_label(form.Url, 'Url', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.Url, {'attr': {'class': 'form-control', 'placeholder': 'Entrez l\'URL de l\'image'}}) }}
+    {{ form_errors(form.Url) }}
+</div>
 
     <button class="btn-submit">
         <i class="fas fa-save"></i> {{ button_label|default('Enregistrer') }}
