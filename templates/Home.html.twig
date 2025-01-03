@@ -1,0 +1,108 @@
+{# templates/home.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .film-card {
+            width: 290px;
+            margin: 20px;
+            box-shadow: 0 1rem 3rem rgba(0,0,0,.175);
+            padding: 1rem;
+            background: white;
+            border-radius: 0.25rem;
+        }
+        
+        .film-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 0.25rem;
+        }
+        
+        .btn-outline {
+            width: 124px;
+        }
+        
+        .movie-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .header {
+            background: #2196f3;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {# Header Section #}
+    <header class="header">
+        <div class="container">
+            <h1 class="text-center">Welcome to the Movie Collection</h1>
+        </div>
+    </header>
+
+    {# Movies Grid Section #}
+    <div class="container">
+        <div class="movie-grid">
+            {% for movie in movies %}
+                <div class="film-card">
+                    <div class="custom-image">
+                        <img src="{{ movie.image }}" alt="{{ movie.title }}">
+                    </div>
+                    <div class="custom-card">
+                        <h3>{{ movie.title }}</h3>
+                        <p>Director: {{ movie.director }}</p>
+                        <p>Year: {{ movie.releaseyear }}</p>
+                        <p>Duration: {{ movie.duration }} min</p>
+                        
+                        {# Star Rating Section #}
+                        <div class="rating">
+                            {% for i in 1..5 %}
+                                {% if i <= movie.rating %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <a href="{{ movie.Url }}" 
+                               class="btn btn-info btn-rounded mb-2">
+                                Watch Trailer
+                            </a>
+
+                            {% if is_granted('ROLE_USER') %}
+                                <a href="{{ path('movie_edit', {'id': movie.id}) }}" 
+                                   class="btn btn-outline-info mb-2">
+                                    Edit
+                                </a>
+                                
+                                <form action="{{ path('movie_delete', {'id': movie.id}) }}" 
+                                      method="POST" 
+                                      style="display: inline;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ movie.id) }}">
+                                    <button class="btn btn-outline-info">Remove</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://kit.fontawesome.com/your-code.js"></script>
+{% endblock %}
