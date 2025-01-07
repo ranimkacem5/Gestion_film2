@@ -13,7 +13,7 @@ class HomePageController extends AbstractController
 
 
     /**
-     * @Route("/homepage", name="homepage_movies")
+     * @Route("/homepage", name="app_home")
      */
     public function movies(MovieRepository $movieRepository): Response
     {
