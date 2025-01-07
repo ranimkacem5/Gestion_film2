@@ -1,0 +1,391 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Films{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        :root {
+            --dark-bg: #0a0a0a;
+            --darker-bg: #050505;
+            --card-bg: #111111;
+            --purple-primary: #9333ea;
+            --purple-glow: #9333ea40;
+            --purple-light: #a855f7;
+            --purple-dark: #7e22ce;
+            --text-white: #f8fafc;
+            --text-gray: #94a3b8;
+        }
+
+        body {
+            background: radial-gradient(circle at center, var(--dark-bg) 0%, var(--darker-bg) 100%);
+            color: var(--text-white);
+            font-family: 'Netflix Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .netflix-header {
+            background: linear-gradient(to bottom, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+            padding: 1.5rem 4%;
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(147, 51, 234, 0.1);
+        }
+
+        .netflix-logo {
+            color: var(--purple-primary);
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px var(--purple-glow);
+            transition: all 0.3s ease;
+        }
+
+        .netflix-logo:hover {
+            color: var(--purple-light);
+            text-shadow: 0 0 20px var(--purple-primary);
+        }
+
+        .hero-section {
+            height: 90vh;
+            position: relative;
+            background: linear-gradient(rgba(0,0,0,0.7), var(--darker-bg)),
+                        url('https://via.placeholder.com/1920x1080') center/cover;
+            display: flex;
+            align-items: center;
+            padding: 0 4%;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 0%, var(--darker-bg) 100%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--purple-light), var(--purple-primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 10px rgba(147, 51, 234, 0.3);
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: drop-shadow(0 0 20px var(--purple-glow)); }
+            50% { filter: drop-shadow(0 0 30px var(--purple-primary)); }
+        }
+
+        .movies-section {
+            margin-top: -150px;
+            position: relative;
+            z-index: 2;
+            padding: 0 4%;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--purple-light);
+            font-weight: 700;
+            text-shadow: 0 0 10px var(--purple-glow);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            position: relative;
+        }
+
+        .movie-card {
+            background: rgba(17, 17, 17, 0.7);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(147, 51, 234, 0.1);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(147, 51, 234, 0.2);
+            border-color: rgba(147, 51, 234, 0.5);
+        }
+
+        .movie-poster-wrapper {
+            position: relative;
+            padding-top: 150%;
+            overflow: hidden;
+        }
+
+        .movie-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .movie-card:hover .movie-poster {
+            transform: scale(1.05);
+        }
+
+        .movie-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(
+                to top,
+                rgba(5, 5, 5, 0.95) 0%,
+                rgba(5, 5, 5, 0.8) 50%,
+                transparent 100%
+            );
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(60%);
+            transition: transform 0.4s ease;
+        }
+
+        .movie-card:hover .movie-overlay {
+            transform: translateY(0);
+        }
+
+        .movie-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0 0 1rem;
+            background: linear-gradient(45deg, #a855f7, #9333ea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(147, 51, 234, 0.3);
+        }
+
+        .movie-metadata {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+        }
+
+        .rating-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.4rem 0.8rem;
+            background: linear-gradient(45deg, #7e22ce, #9333ea);
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .rating-badge::before {
+            content: '★';
+            color: #ffd700;
+        }
+
+        .movie-info {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            color: #94a3b8;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .movie-card:hover .movie-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .movie-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+        }
+
+        .btn-play {
+            background: linear-gradient(45deg, #7e22ce, #9333ea);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+        }
+
+        .btn-play:hover {
+            background: linear-gradient(45deg, #9333ea, #a855f7);
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
+        }
+
+        .btn-edit {
+            background: rgba(147, 51, 234, 0.1);
+            color: #a855f7;
+            border: 2px solid #9333ea;
+        }
+
+        .btn-edit:hover {
+            background: rgba(147, 51, 234, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .movie-duration {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #94a3b8;
+        }
+
+        .movie-duration::before {
+            content: '•';
+            color: #9333ea;
+        }
+
+        @media (max-width: 1200px) {
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .movie-title {
+                font-size: 1.2rem;
+            }
+
+            .movie-overlay {
+                padding: 1.5rem 1rem 1rem;
+            }
+
+            .netflix-header {
+                padding: 1rem 4%;
+            }
+
+            .netflix-logo {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 1rem;
+            }
+
+            .movie-overlay {
+                padding: 1rem;
+            }
+
+            .movie-title {
+                font-size: 1.1rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .movie-btn {
+                padding: 0.6rem;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <header class="netflix-header">
+        <a href="#" class="netflix-logo">Films</a>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Découvrez notre collection</h1>
+        </div>
+    </section>
+
+    <section class="movies-section">
+        <h2 class="section-title">Films populaires</h2>
+        <div class="movies-grid">
+            {% for movie in movies %}
+                <article class="movie-card">
+                    <div class="movie-poster-wrapper">
+                       <img src="{{ asset('images/movies/' ~ movie.imageName) }}" alt="{{ movie.title }}" class="movie-poster">
+                        <div class="movie-overlay">
+                            <h3 class="movie-title">{{ movie.title }}</h3>
+                            <div class="movie-metadata">
+                                <span class="rating-badge">{{ movie.rating }}/5</span>
+                                <span class="movie-duration">{{ movie.duration }}h</span>
+                            </div>
+                            <p class="movie-info">
+                                {{ movie.releaseyear }} • Réalisé par {{ movie.director }}
+                                {% if movie.description %}
+                                    <br>{{ movie.description }}
+                                {% endif %}
+                            </p>
+                            <div class="movie-actions">
+                                <a href="{{ path('app_movie_show', {'id': movie.id}) }}" class="movie-btn btn-play">Voir</a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}
