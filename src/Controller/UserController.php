@@ -78,4 +78,34 @@ final class UserController extends AbstractController
 
         return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/register', name: 'app_register')]
+    public function register(
+        Request $request,
+        UserPasswordHasherInterface $passwordHasher,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Hash le mot de passe
+            $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
+            $user->setPassword($hashedPassword);
+
+            // Définit un rôle par défaut
+            $user->setRoles(['ROLE_USER']);
+
+            // Sauvegarde l'utilisateur dans la base de données
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            // Redirige vers la page de connexion ou autre
+            return $this->redirectToRoute('app_login');
+        }
+
+        return $this->render('SignUp.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
+    }
 }
