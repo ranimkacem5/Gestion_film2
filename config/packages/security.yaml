@@ -15,29 +15,3 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-        # Configurer le firewall principal
-        main:
-            # Configuration de l'authentification
-            provider: users_in_database  # Utilisation du provider créé ci-dessus
-
-            # Configuration du formulaire de connexion
-            form_login:
-                login_path: login  # Route vers la page de connexion
-                check_path: login  # Route qui traite la soumission du formulaire
-                username_parameter: email  # Paramètre du formulaire pour l'email
-                password_parameter: password  # Paramètre du formulaire pour le mot de passe
-
-            # Déconnexion
-            logout:
-                path: app_logout  # Route de déconnexion
-
-            # Authentification automatique après un certain délai
-            remember_me:
-                secret: '%env(APP_SECRET)%'  # Clé secrète, définie dans votre fichier .env
-
-    # Définition des rôles et des restrictions d'accès
-    access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/, roles: ROLE_USER }
-

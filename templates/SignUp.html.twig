@@ -148,15 +148,14 @@
         }
     </style>
 {% endblock %}
-
 {% block body %}
     <div class="auth-container">
         <div class="auth-card">
             <h1 class="auth-title">Connexion</h1>
-            {% if error %}
-                <div class="error-message">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
-            <form action="{{ path('app_login') }}" method="post" class="auth-form">
+            
+ 
+            
+            <form action="{{ path('app_login') }}" method="POST" class="auth-form">
                 <div class="form-group">
                     <input type="email" id="email" name="_username" class="form-input" placeholder=" " required>
                     <label for="email" class="form-label">Email</label>
@@ -166,16 +165,9 @@
                     <label for="password" class="form-label">Mot de passe</label>
                 </div>
                 <button type="submit" class="auth-button">Se connecter</button>
-
-
-
-
-                
             </form>
+            
             <a href="{{ path('app_register') }}" class="auth-link">Pas encore de compte ? S'inscrire</a>
         </div>
     </div>
-
-
-
 {% endblock %}
