@@ -39,5 +39,5 @@ security:
     # Définition des rôles et des restrictions d'accès
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/, roles: ROLE_USER }
 
